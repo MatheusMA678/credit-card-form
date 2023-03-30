@@ -8,6 +8,8 @@ export const InputLabel = ({
   type,
   name,
   max,
+  onFocus,
+  onBlur,
 }) => {
   return (
     <div className="flex flex-col gap-1">
@@ -22,6 +24,8 @@ export const InputLabel = ({
         value={value}
         placeholder={placeholder}
         maxLength={max}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </div>
   );

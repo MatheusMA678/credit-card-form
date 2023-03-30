@@ -14,6 +14,10 @@ export default {
         textColor: "#E5E7EB",
         borderColor: "#374151",
       },
+      backgroundImage: {
+        cardFront: "url(./src/assets/images/card-bg.png)",
+        cardBack: "url(./src/assets/images/card-back-bg.png)",
+      },
     },
   },
   plugins: [],
