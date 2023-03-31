@@ -1,3 +1,66 @@
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
+
+.rccs__card--front,
+.rccs__card--back {
+  @apply !bg-cover !bg-no-repeat;
+}
+
+.rccs__card__background {
+  @apply !bg-none !rotate-0;
+}
+
+.rccs__card--front {
+  @apply !bg-cardFront;
+}
+
+.rccs__card--back {
+  @apply !bg-cardBack;
+}
+
+.rccs__chip {
+  @apply !bg-approxIcon !right-6 !top-6 !w-6 !h-6;
+}
+
+.rccs__stripe {
+  @apply !bg-body;
+}
+
+.rccs__signature {
+  @apply !bg-white !bg-none rounded-lg;
+}
+
+.rccs__issuer {
+  @apply !top-6 !left-6 !w-12 !h-12 !bg-contain;
+}
+
+.rccs__name,
+.rccs__number {
+  @apply !text-white !font-primary;
+}
+
+/*.rccs__name {
+  @apply !text-sm;
+}*/
+
+.rccs__number {
+  @apply !font-semibold;
+}
+
+.rccs__card--mastercard .rccs__issuer {
+  @apply !bg-mastercardIcon;
+}
+
+.rccs__expiry__valid,
+.rccs__expiry {
+  @apply !text-white;
+}
+
+.rccs__card--back .rccs__issuer {
+  @apply !opacity-0;
+}
+
+.rccs--focused {
+  @apply !font-[500];
+}

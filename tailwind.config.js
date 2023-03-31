@@ -17,6 +17,8 @@ export default {
       backgroundImage: {
         cardFront: "url(./src/assets/images/card-bg.png)",
         cardBack: "url(./src/assets/images/card-back-bg.png)",
+        approxIcon: "url(./src/assets/icons/approx-icon.svg)",
+        mastercardIcon: "url(./src/assets/icons/mastercard.svg)",
       },
     },
   },

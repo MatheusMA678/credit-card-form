@@ -1,74 +1,141 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
 import { InputLabel } from "./components/Input";
+import { motion } from "framer-motion";
+import Card from "react-credit-cards-2";
+import {
+  formatCreditCardNumber,
+  formatCVC,
+  formatExpirationDate,
+  formatFormData,
+} from "./utils";
 
 import Shield from "./assets/icons/shield.svg";
-import { Card } from "./components/Card";
+import "react-credit-cards-2/es/styles-compiled.css";
 
 const App = () => {
-  const [isFocused, setIsFocused] = useState(false);
+  const formRef = createRef();
   const [value, setValue] = useState({
-    cardNumber: "",
-    cardName: "",
-    validity: "",
+    number: "",
+    expiry: "",
     cvc: "",
+    name: "",
+    focus: "",
   });
+
+  const handleChange = ({ target }) => {
+    if (target.name === "number") {
+      target.value = formatCreditCardNumber(target.value);
+    } else if (target.name === "expiry") {
+      target.value = formatExpirationDate(target.value);
+    } else if (target.name === "cvc") {
+      target.value = formatCVC(target.value);
+    }
+
+    setValue((prev) => ({
+      ...prev,
+      [target.name]: target.value,
+    }));
+  };
+
+  const handleFocus = (e) => {
+    setValue((prev) => ({ ...prev, focus: e.target.name }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const submitForm = () => {
+    formRef.current.submit();
+  };
 
   return (
     <div className="font-primary h-screen flex justify-center items-center bg-body text-gray-200">
       <main className="p-8 bg-main rounded-lg h-[450px] w-[750px] border border-borderColor grid grid-cols-2 grid-rows-[auto_4rem] gap-8">
-        <form className="flex flex-col gap-4">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4"
+        >
           <InputLabel
+            type="tel"
             label="Número do cartão"
-            name="cardNumber"
+            name="number"
             placeholder="**** **** **** ****"
-            max={16}
-            onChange={(e) => setValue({ ...value, cardNumber: e.target.value })}
-            value={value.cardNumber}
+            onChange={handleChange}
+            value={value.number}
+            pattern="[\d| ]{16,22}"
+            onFocus={handleFocus}
           />
           <InputLabel
+            type="text"
             label="Nome do titular"
-            name="cardName"
+            name="name"
             placeholder="Nome como está no cartão"
-            value={value.cardName}
-            onChange={(e) => setValue({ ...value, cardName: e.target.value })}
+            value={value.name}
+            onChange={handleChange}
+            onFocus={handleFocus}
           />
           <div className="flex items-center gap-2">
             <InputLabel
-              type="text"
+              type="tel"
               label="Validade"
-              name="validity"
+              name="expiry"
               placeholder="mm/aa"
               max={5}
-              value={value.validity}
-              onChange={(e) => setValue({ ...value, validity: e.target.value })}
+              value={value.expiry}
+              onChange={handleChange}
+              pattern="\d\d/\d\d"
+              onFocus={handleFocus}
             />
             <InputLabel
-              type={"text"}
+              type="tel"
               label="CVV"
-              name="cvv"
+              name="cvc"
               placeholder="***"
               max={3}
               value={value.cvc}
-              onChange={(e) => setValue({ ...value, cvc: e.target.value })}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              pattern="\d{3,4}"
+              hasInfo={true}
             />
           </div>
         </form>
         <div className="w-full h-full flex items-center justify-center gap-8 flex-col">
-          <Card
-            cardNumber={value.cardNumber}
-            cardName={value.cardName}
-            validity={value.validity}
-            cvc={value.cvc}
-            isFocused={isFocused}
-          />
+          <motion.div
+            drag
+            dragConstraints={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+            dragElastic={0.1}
+          >
+            <Card
+              cvc={value.cvc}
+              expiry={value.expiry}
+              focused={value.focus}
+              name={value.name}
+              number={value.number}
+              locale={{
+                valid: "Válido até",
+              }}
+              placeholders={{
+                name: "Seu nome aqui",
+              }}
+            />
+          </motion.div>
           <span className="text-sm flex items-center gap-2">
             <img src={Shield} alt="Segurança" />
             Seus dados estão seguros
           </span>
         </div>
-        <button className="col-span-2 w-full h-full bg-purplePrimary text-xl font-semibold rounded-md">
+        <button
+          onClick={submitForm}
+          className="col-span-2 w-full h-full bg-purplePrimary text-xl font-semibold rounded-md transition hover:bg-purplePrimary/80 active:bg-purplePrimary/50"
+        >
           Adicionar cartão
         </button>
       </main>
